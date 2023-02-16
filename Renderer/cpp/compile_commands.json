@@ -1,18 +1,7 @@
 [
-  {
-    "arguments": [
-      "g++",
-      "-MD",
-      "-MP",
-      "-DDEBUG",
-      "-g",
-      "-c",
-      "-o",
-      "obj/Debug/main.o",
-      "main.cpp"
-    ],
-    "directory": "G:/ROTStudios/rot-gameengine/Renderer/cpp",
-    "file": "G:/ROTStudios/rot-gameengine/Renderer/cpp/main.cpp",
-    "output": "G:/ROTStudios/rot-gameengine/Renderer/cpp/obj/Debug/main.o"
-  },
+          {
+            "directory": "G:/ROTStudios/rot-gameengine/Renderer/cpp",
+            "file": "G:/ROTStudios/rot-gameengine/Renderer/cpp/main.cpp",
+            "command": "cc -MD -MP -DDEBUG -g -o G:/ROTStudios/rot-gameengine/Renderer/cpp/obj/Debug/main.o -MF G:/ROTStudios/rot-gameengine/Renderer/cpp/obj/Debug/main.d -c G:/ROTStudios/rot-gameengine/Renderer/cpp/main.cpp"
+          }
 ]

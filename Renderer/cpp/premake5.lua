@@ -1,3 +1,5 @@
+require("export-compile-commands")
+
 workspace("RotRenderer")
 configurations({ "Debug", "Release" })
 
