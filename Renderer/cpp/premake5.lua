@@ -8,7 +8,13 @@ kind("ConsoleApp")
 language("C++")
 targetdir("bin/%{cfg.buildvfg}")
 
-files({ "**.hpp", "**.cpp" })
+system("Windows")
+architecture("x86_64")
+
+files({ "main.cpp" })
+includedirs({ "include", "C:/VulkanSDK/1.3.239.0/Include" })
+libdirs({ "C:/VulkanSDK/1.3.239.0/Lib", "vendor/glfw-3.3.8/lib-vc2022" })
+links({ "vulkan-1", "glfw3" })
 
 filter("configurations:Debug")
 defines({ "DEBUG" })

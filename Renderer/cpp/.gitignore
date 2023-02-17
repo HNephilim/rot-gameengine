@@ -3,3 +3,5 @@ obj/
 RotRenderer.*
 .vs/
 .cache/
+compile_commands
+vendor/
