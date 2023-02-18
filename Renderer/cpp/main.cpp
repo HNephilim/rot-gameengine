@@ -9,26 +9,26 @@
 #include <glm/vec4.hpp>
 
 int main(int argc, char *argv[]) {
-  glfwInit();
+    glfwInit();
 
-  glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-  GLFWwindow *window =
-      glfwCreateWindow(800, 600, "Vulkan Window", nullptr, nullptr);
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+    GLFWwindow *window =
+        glfwCreateWindow(800, 600, "Vulkan Window", nullptr, nullptr);
 
-  uint32_t extensionCount = 0;
-  vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
+    uint32_t extensionCount = 0;
+    vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
 
-  glm::mat4 matrix;
-  glm::vec4 vec;
+    glm::mat4 matrix;
+    glm::vec4 vec;
 
-  auto test = matrix * vec;
+    auto test = matrix * vec;
 
-  while (!glfwWindowShouldClose(window)) {
-    glfwPollEvents();
-  }
+    while (!glfwWindowShouldClose(window)) {
+        glfwPollEvents();
+    }
 
-  glfwDestroyWindow(window);
-  glfwTerminate();
+    glfwDestroyWindow(window);
+    glfwTerminate();
 
-  return 0;
+    return 0;
 }
