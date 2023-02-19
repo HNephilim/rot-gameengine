@@ -10,6 +10,12 @@ class RotWindow {
     RotWindow(int w, int h, std::string name);
     ~RotWindow();
 
+    // Adhering to RAII, we should delete copy constructors to guard the GLFWwindow pointer;
+    RotWindow(const RotWindow &) = delete;
+    RotWindow &operator=(const RotWindow &) = delete;
+
+    bool shouldClose();
+
   private:
     void initWindow();
 

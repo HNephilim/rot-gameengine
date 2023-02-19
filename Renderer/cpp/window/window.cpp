@@ -14,7 +14,8 @@ void RotWindow::initWindow() {
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-    this->window = glfwCreateWindow(width, height, windowName.c_str(), nullptr, nullptr);
+    window = glfwCreateWindow(width, height, windowName.c_str(), nullptr, nullptr);
 }
 
+bool RotWindow::shouldClose() { return glfwWindowShouldClose(window); }
 } // namespace rot
