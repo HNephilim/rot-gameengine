@@ -5,3 +5,4 @@ RotRenderer.*
 .cache/
 compile_commands
 vendor/
+compile_commands.json
