@@ -22,6 +22,8 @@
 
 #include "profiler/profiler.hpp"
 
+#include <stdlib.h>
+#include <string>
 #include <thread>
 #include <vector>
 
@@ -30,7 +32,7 @@ using namespace std;
 void foo(const char *str, long iterations) {
     cout << str << " started execution\n";
     PROF_INIT_THD(str);
-    PROF_SCOPED(PROF_LVL_ALL, "Thread BAR");
+    PROF_SCOPED(PROF_LVL_ALL, "Thread FOO");
 
     int a = 1;
     for (long i = 0; i < iterations; i++)
@@ -54,6 +56,10 @@ void bar(const char *str, long iterations) {
 }
 
 int main() {
+    if (const char *lvl = getenv("GP_PROFILE_LEVEL")) {
+        cout << "Env = " << lvl << endl;
+    }
+
     PROF_INIT_PROC("Main Process");
 
     thread a(foo, "Thread A", 100);

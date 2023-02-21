@@ -244,22 +244,19 @@ void dumpTracingFile() {
     using json = nlohmann::json;
 
     std::vector<json> entry_vec;
-
-    std::cout << process_profiler->threads_profile.size() << std::endl;
+    // Traced Events
     for (const auto &tprof : process_profiler->threads_profile) {
-        std::cout << "Profiling thread\n"
-                  << "Numer of entries = " << tprof.entries.size() << std::endl;
         for (const auto &entry : tprof.entries) {
             json prof_entry;
             prof_entry["ph"] = "X";
             prof_entry["name"] = entry.name;
             prof_entry["pid"] = process_profiler->pid;
             prof_entry["tid"] = static_cast<int64_t>(tprof.tid);
+            prof_entry["ts"] = toProfileScale(entry.start);
             prof_entry["dur"] = toProfileScale(entry.end - entry.start);
             prof_entry["args"] = entry.details;
 
             entry_vec.push_back(prof_entry);
-            printf("Print Debugger =)");
         }
     }
     // Metadata
