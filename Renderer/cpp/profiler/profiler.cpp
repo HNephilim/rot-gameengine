@@ -271,6 +271,24 @@ void dumpTracingFile() {
     entry_vec.push_back(entry_json);
     entry_vec.push_back(entry_json2);
 
+    // Naming and ordering of threads
+    for (const auto &tprof : process_profiler->threads_profile) {
+        json entry_json{{"ph", "M"},
+                        {"name", "thread_name"},
+                        {"pid", process_profiler->pid},
+                        {"tid", static_cast<int64_t>(tprof.tid)},
+                        {"args", {"name", tprof.name}}};
+
+        json entry_json2{{"ph", "M"},
+                         {"name", "thread_sort_index"},
+                         {"pid", process_profiler->pid},
+                         {"tid", static_cast<int64_t>(tprof.tid)},
+                         {"args", {"sort_index", tprof.index}}};
+
+        entry_vec.push_back(entry_json);
+        entry_vec.push_back(entry_json2);
+    }
+
     json trace;
     trace["traceEvents"] = entry_vec;
 
