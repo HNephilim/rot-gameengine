@@ -34,7 +34,7 @@ inline uint32_t getProfileLevel() {
     static std::once_flag Flag{};
     std::call_once(Flag, []() {
         if (char *env_str = getenv("GP_PROFILE_LEVEL"))
-            prof_lvl = std::stoi(env_str);
+            prof_lvl = std::stoul(env_str, nullptr, 16);
     });
 
     return prof_lvl;
