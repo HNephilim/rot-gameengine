@@ -189,6 +189,7 @@ void initThreadProfiler(std::string &&thread_name, int index) {
 }
 
 void beginProfilePoint(const std::string &&name, const std::string &&details) {
+    printf("Begin profile point called\n");
     assert(name != "");
 
     // Weak check: init thread profiler if it is needed.
@@ -210,6 +211,7 @@ void beginProfilePoint(const std::string &&name, const std::string &&details) {
 }
 
 void endProfilePoint() {
+    printf("End profile point called!\n");
     assert(process_profiler != nullptr);
 
     if (!process_profiler->enabled) {
@@ -248,45 +250,51 @@ void dumpTracingFile() {
         std::cout << "Profiling thread\n"
                   << "Numer of entries = " << tprof.entries.size() << std::endl;
         for (const auto &entry : tprof.entries) {
-            json entry_json{{"ph", "X"},
-                            {"name", entry.name},
-                            {"pid", process_profiler->pid},
-                            {"tid", static_cast<int64_t>(tprof.tid)},
-                            {"ts", toProfileScale(entry.start)},
-                            {"dur", toProfileScale(entry.end - entry.start)},
-                            {"args", entry.details}
+            json prof_entry;
+            prof_entry["ph"] = "X";
+            prof_entry["name"] = entry.name;
+            prof_entry["pid"] = process_profiler->pid;
+            prof_entry["tid"] = static_cast<int64_t>(tprof.tid);
+            prof_entry["dur"] = toProfileScale(entry.end - entry.start);
+            prof_entry["args"] = entry.details;
 
-            };
-
-            entry_vec.push_back(entry_json);
+            entry_vec.push_back(prof_entry);
             printf("Print Debugger =)");
         }
     }
     // Metadata
     // Naming and ordering of processes.
-    json entry_json{{{"ph", "M"}, {"name", "process_name"}, {"pid", process_profiler->pid}, {"args", {"name", process_profiler->name}}}};
+    json metadata_name;
+    metadata_name["ph"] = "M";
+    metadata_name["name"] = "process_name";
+    metadata_name["pid"] = process_profiler->pid;
+    metadata_name["args"] = json::object({{"name", process_profiler->name}});
 
-    json entry_json2{
-        {{"ph", "M"}, {"name", "process_sort_index"}, {"pid", process_profiler->pid}, {"args", {"sort_index", process_profiler->index}}}};
-    entry_vec.push_back(entry_json);
-    entry_vec.push_back(entry_json2);
+    json metadata_sort_index;
+    metadata_sort_index["ph"] = "M";
+    metadata_sort_index["name"] = "process_sort_index";
+    metadata_sort_index["pid"] = process_profiler->pid;
+    metadata_sort_index["args"] = json::object({{"sort_index", process_profiler->index}});
+    entry_vec.push_back(metadata_name);
+    entry_vec.push_back(metadata_sort_index);
 
     // Naming and ordering of threads
     for (const auto &tprof : process_profiler->threads_profile) {
-        json entry_json{{"ph", "M"},
-                        {"name", "thread_name"},
-                        {"pid", process_profiler->pid},
-                        {"tid", static_cast<int64_t>(tprof.tid)},
-                        {"args", {"name", tprof.name}}};
+        json naming_thread;
+        naming_thread["ph"] = "M";
+        naming_thread["name"] = "thread_name";
+        naming_thread["pid"] = process_profiler->pid;
+        naming_thread["tid"] = static_cast<int64_t>(tprof.tid);
+        naming_thread["args"] = json::object({{"name", tprof.name}});
 
-        json entry_json2{{"ph", "M"},
-                         {"name", "thread_sort_index"},
-                         {"pid", process_profiler->pid},
-                         {"tid", static_cast<int64_t>(tprof.tid)},
-                         {"args", {"sort_index", tprof.index}}};
-
-        entry_vec.push_back(entry_json);
-        entry_vec.push_back(entry_json2);
+        json sorting_thread;
+        sorting_thread["ph"] = "M";
+        sorting_thread["name"] = "process_sort_index";
+        sorting_thread["pid"] = process_profiler->pid;
+        sorting_thread["tid"] = static_cast<int64_t>(tprof.tid);
+        sorting_thread["args"] = json::object({{"sort_index", tprof.index}});
+        entry_vec.push_back(naming_thread);
+        entry_vec.push_back(sorting_thread);
     }
 
     json trace;
