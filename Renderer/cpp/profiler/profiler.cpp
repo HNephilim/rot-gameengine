@@ -189,7 +189,6 @@ void initThreadProfiler(std::string &&thread_name, int index) {
 }
 
 void beginProfilePoint(const std::string &&name, const std::string &&details) {
-    printf("Begin profile point called\n");
     assert(name != "");
 
     // Weak check: init thread profiler if it is needed.
@@ -211,7 +210,6 @@ void beginProfilePoint(const std::string &&name, const std::string &&details) {
 }
 
 void endProfilePoint() {
-    printf("End profile point called!\n");
     assert(process_profiler != nullptr);
 
     if (!process_profiler->enabled) {
@@ -297,61 +295,8 @@ void dumpTracingFile() {
     json trace;
     trace["traceEvents"] = entry_vec;
 
-    std::ofstream out("trace.json");
+    std::ofstream out(process_profiler->filename);
     out << std::setw(4) << trace << std::endl;
-
-    /* json *dump; */
-    /* dump = new json::json("profile.json"); // process_profiler->filename); */
-    /* dump->object({[&] { */
-    /*     // chrometracing array of events (include traced events and metadata */
-    /*     // ones). */
-    /*     dump->attributearray( */
-    /*         dump = new json::json("profile.json"); // process_profiler->filename); */
-    /*         {[&] {                                 // traced events. */
-    /*              for (const auto &tprof : process_profiler->threads_profile) { */
-    /*                  for (const auto &entry : tprof.entries) { */
-    /*                      dump->object({[&] { dump->attribute("ph", "x"); }, [&] { dump->attribute("name", entry.name); }, */
-    /*                                    [&] { dump->attribute("pid", process_profiler->pid); }, */
-    /*                                    [&] { dump->attribute("tid", static_cast<int64_t>(tprof.tid)); }, */
-    /*                                    [&] { dump->attribute("ts", toprofilescale(entry.start)); }, */
-    /*                                    [&] { dump->attribute("dur", toprofilescale(entry.end - entry.start)); }, */
-    /*                                    [&] { dump->attribute("args", entry.details); }}); */
-    /*                  } */
-    /*              } */
-    /*          }, */
-    /*          [&] { // metadata. naming and ordering of processes. */
-    /*              dump->object({[&] { dump->attribute("ph", "m"); }, [&] { dump->attribute("name", "process_name"); }, */
-    /*                            [&] { dump->attribute("pid", process_profiler->pid); }, */
-    /*                            [&] { dump->attributeobject("args", {[&] { dump->attribute("name", process_profiler->name); }}); }}); */
-    /*          }, */
-    /*          [&] { */
-    /*              dump->object({[&] { dump->attribute("ph", "m"); }, [&] { dump->attribute("name", "process_sort_index"); }, */
-    /*                            [&] { dump->attribute("pid", process_profiler->pid); }, */
-    /*                            [&] { dump->attributeobject("args", {[&] { dump->attribute("sort_index", process_profiler->index); }});
-     * }}); */
-    /*          }, */
-    /*          [&] { */
-    /*              // naming and ordering of threads. */
-    /*              for (const auto &tprof : process_profiler->threads_profile) { */
-    /*                  dump->object( */
-    /*                      {[&] { */
-    /*                           dump->object({[&] { dump->attribute("ph", "m"); }, [&] { dump->attribute("name", "thread_name"); }, */
-    /*                                         [&] { dump->attribute("pid", process_profiler->pid); }, */
-    /*                                         [&] { dump->attribute("tid", static_cast<int64_t>(tprof.tid)); }, */
-    /*                                         [&] { dump->attributeobject("args", {[&] { dump->attribute("name", tprof.name); }}); }}); */
-    /*                       }, */
-    /*                       [&] { */
-    /*                           dump->object({[&] { dump->attribute("ph", "m"); }, [&] { dump->attribute("name", "thread_sort_index"); },
-     */
-    /*                                         [&] { dump->attribute("pid", process_profiler->pid); }, */
-    /*                                         [&] { dump->attribute("tid", static_cast<int64_t>(tprof.tid)); }, */
-    /*                                         [&] { dump->attributeobject("args", {[&] { dump->attribute("sort_index", tprof.index); }});
-     * }}); */
-    /*                       }}); */
-    /*              } */
-    /*          }}); */
-    /* }}); */
-    /* delete dump; */
 }
 
 } // namespace _profiler
